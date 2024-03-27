@@ -42,22 +42,6 @@ class TimerActions extends StatelessWidget {
               child: const Icon(Icons.play_arrow, color: Colors.white),
             ),
           ),
-        if (context.watch<TimerBloc>().state.status == TimerStatus.paused ||
-            context.watch<TimerBloc>().state.status == TimerStatus.running)
-          GestureDetector(
-            onTap: () {
-              context.read<TimerBloc>().add(const TimerStopped());
-            },
-            child: Container(
-              height: 40,
-              width: 40,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 0, 69, 104),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: const Icon(Icons.stop, color: Colors.white),
-            ),
-          ),
         if (context.watch<TimerBloc>().state.status == TimerStatus.finished)
           GestureDetector(
             onTap: () {
@@ -71,6 +55,23 @@ class TimerActions extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: const Icon(Icons.replay, color: Colors.white),
+            ),
+          ),
+        if (context.watch<TimerBloc>().state.status == TimerStatus.paused ||
+            context.watch<TimerBloc>().state.status == TimerStatus.running ||
+            context.watch<TimerBloc>().state.status == TimerStatus.finished)
+          GestureDetector(
+            onTap: () {
+              context.read<TimerBloc>().add(const TimerStopped());
+            },
+            child: Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 0, 69, 104),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: const Icon(Icons.stop, color: Colors.white),
             ),
           ),
       ],

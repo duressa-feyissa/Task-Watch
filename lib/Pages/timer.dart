@@ -1,7 +1,7 @@
 import 'package:bloc_mastering/Bloc/Timerbloc/timer_bloc.dart';
-import 'package:bloc_mastering/widget/circular_timer_widget.dart';
 import 'package:bloc_mastering/widget/time_setter.dart';
 import 'package:bloc_mastering/widget/timer_controller.dart';
+import 'package:bloc_mastering/widget/timer_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -60,11 +60,11 @@ class Timer extends StatelessWidget {
             ],
           ),
         if (context.watch<TimerBloc>().state.status != TimerStatus.initial)
-          Column(
+          const Column(
             children: [
-              CircularTimerWidget(second: int.tryParse(_time.text) ?? 0),
-              const SizedBox(height: 64),
-              const TimerActions(),
+              TimerDisplay(),
+              SizedBox(height: 40),
+              TimerActions(),
             ],
           ),
       ],
