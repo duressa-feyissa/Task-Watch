@@ -29,7 +29,7 @@ To use this project, follow these steps:
 
 1. Clone the repository to your local machine:
     
-    bash https://github.com/duressa-feyissa/bloc_mastering.git
+        bash https://github.com/duressa-feyissa/bloc_mastering.git
 
 2. Navigate to the project directory:
     
