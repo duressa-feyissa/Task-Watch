@@ -1,7 +1,7 @@
-import 'package:bloc_mastering/Todobloc/todo_bloc.dart';
-import 'package:bloc_mastering/add_todo.dart';
-import 'package:bloc_mastering/home.dart';
-import 'package:bloc_mastering/timer.dart';
+import 'package:bloc_mastering/Bloc/Todobloc/todo_bloc.dart';
+import 'package:bloc_mastering/Pages/add_todo.dart';
+import 'package:bloc_mastering/Pages/home.dart';
+import 'package:bloc_mastering/Pages/timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

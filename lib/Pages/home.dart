@@ -1,8 +1,8 @@
-import 'package:bloc_mastering/detail.dart';
+import 'package:bloc_mastering/Pages/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'Todobloc/todo_bloc.dart';
+import '../Bloc/Todobloc/todo_bloc.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
