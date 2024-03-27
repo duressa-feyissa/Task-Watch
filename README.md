@@ -29,21 +29,21 @@ To use this project, follow these steps:
 
 1. Clone the repository to your local machine:
     
-        bash https://github.com/duressa-feyissa/bloc_mastering.git
+        git clone https://github.com/duressa-feyissa/bloc_mastering.git
 
 2. Navigate to the project directory:
     
-        bash cd bloc_mastering
+        cd bloc_mastering
         
 
 3. Install the dependencies:
     
-        bash flutter pub get
+        flutter pub get
         
 
 4. Run the application:
     
-        bash  flutter run
+        flutter run
         
 
 5. Explore the todo activity and timer features in the application.
