@@ -25,20 +25,20 @@ class _LayoutState extends State<Layout> {
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
       const Home(),
-      const Timer(),
+      Timer(),
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Todos',
+        title: const Text('Task Watch',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500)),
       ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.list),
+            label: 'Todos',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.access_alarm),

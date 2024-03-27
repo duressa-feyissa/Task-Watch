@@ -9,59 +9,84 @@ class TodoDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _timController = TextEditingController();
+    final todo = context.watch<TodoBloc>().state.todos[index];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Todo Detail'),
+        actions: [
+          IconButton(
+            padding: const EdgeInsets.only(right: 16),
+            icon: const Icon(Icons.delete, color: Colors.red),
+            onPressed: () {
+              context.read<TodoBloc>().add(
+                    DeleteTodoEvent(id: todo.id),
+                  );
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('This is a detailed view of the todo:'),
+            const Text(
+              'This is a detailed view of the todo:',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
             const SizedBox(height: 16),
-            Text('Title: ${context.watch<TodoBloc>().state.todos[index].title}',
-                style: const TextStyle(fontSize: 18)),
+            Text(
+              'Title: ${todo.title}',
+              style: const TextStyle(fontSize: 18),
+            ),
             const SizedBox(height: 16),
-            context.watch<TodoBloc>().state.todos[index].completed
-                ? const Row(
-                    children: [
-                      Text('Status:', style: TextStyle(fontSize: 16)),
-                      SizedBox(width: 8),
-                      Icon(Icons.check, color: Colors.green),
-                    ],
-                  )
-                : const Row(
-                    children: [
-                      Text('Status: ', style: TextStyle(fontSize: 16)),
-                      SizedBox(width: 8),
-                      Icon(Icons.calendar_today_outlined, color: Colors.green),
-                    ],
+            Row(
+              children: [
+                const Text(
+                  'Status: ',
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(width: 8),
+                Icon(
+                  todo.completed ? Icons.check : Icons.calendar_today_outlined,
+                  color: Colors.green,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  todo.completed ? 'Completed' : 'Pending',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: todo.completed ? Colors.green : Colors.red,
+                    fontWeight: FontWeight.bold,
                   ),
-            const SizedBox(height: 80),
-            if (!context.watch<TodoBloc>().state.todos[index].completed)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Set a to finish this todo:',
-                      style: TextStyle(fontSize: 18,)),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _timController,
-                    decoration: const InputDecoration(
-                      hintText: 'Time',
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Start'),
-                  ),
-                ],
-              ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Checkbox(
+                  value: todo.completed,
+                  onChanged: (bool? newValue) {
+                    context.read<TodoBloc>().add(
+                          UpdateTodoEvent(
+                            id: todo.id,
+                            completed: newValue!,
+                          ),
+                        );
+                  },
+                  activeColor: Colors.green,
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'Mark as completed',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
           ],
         ),
       ),

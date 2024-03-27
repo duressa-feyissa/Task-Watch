@@ -2,28 +2,136 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:bloc_mastering/Timerbloc/timer_bloc.dart';
+import 'package:bloc_mastering/timer_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Timer extends StatelessWidget {
-  const Timer({super.key});
+  Timer({super.key});
+
+  final TextEditingController _time = TextEditingController(text: '5');
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CircularTimerWidget(),
-        SizedBox(height: 32),
-        Text('Timer'),
+        if (context.watch<TimerBloc>().state.status == TimerStatus.initial)
+          Column(
+            children: [
+              const Text(
+                'Set the Timer',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                  color: Color.fromARGB(255, 0, 69, 104),
+                ),
+              ),
+              const SizedBox(height: 50),
+              TimeSetter(timeController: _time),
+              const SizedBox(height: 64),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 0, 69, 104),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                clipBehavior: Clip.antiAlias,
+                onPressed: () {
+                  context.read<TimerBloc>().add(
+                        TimerStarted(
+                          duration: int.tryParse(_time.text) ?? 0,
+                        ),
+                      );
+                },
+                child: Container(
+                  width: 100,
+                  height: 55,
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'Start',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        if (context.watch<TimerBloc>().state.status != TimerStatus.initial)
+          Column(
+            children: [
+              CircularTimerWidget(second: int.tryParse(_time.text) ?? 0),
+              const SizedBox(height: 64),
+              const TimerActions(),
+            ],
+          ),
+      ],
+    );
+  }
+}
+
+class TimeSetter extends StatelessWidget {
+  final TextEditingController timeController;
+
+  const TimeSetter({super.key, required this.timeController});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          icon: const Icon(
+            Icons.arrow_drop_up,
+            size: 60,
+            color: Color.fromARGB(255, 0, 69, 104),
+          ),
+          onPressed: () {
+            int currentTime = int.tryParse(timeController.text) ?? 0;
+            timeController.text = (currentTime + 1).toString();
+          },
+        ),
+        const SizedBox(width: 32),
+        SizedBox(
+          width: 80,
+          child: TextField(
+            controller: timeController,
+            textAlign: TextAlign.center,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              focusColor: Color.fromARGB(255, 0, 69, 104),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(12),
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 32),
+        IconButton(
+          icon: const Icon(Icons.arrow_drop_down,
+              size: 60, color: Color.fromARGB(255, 0, 69, 104)),
+          onPressed: () {
+            int currentTime = int.tryParse(timeController.text) ?? 0;
+            if (currentTime > 0) {
+              timeController.text = (currentTime - 1).toString();
+            }
+          },
+        ),
       ],
     );
   }
 }
 
 class CircularTimerWidget extends StatefulWidget {
+  final int second;
   const CircularTimerWidget({
     super.key,
+    required this.second,
   });
 
   @override
@@ -32,16 +140,16 @@ class CircularTimerWidget extends StatefulWidget {
 
 class _CircularTimerWidgetState extends State<CircularTimerWidget> {
   late StreamSubscription<int> _currentTimeSubscription;
-  int _currentTime = 0;
+  int duration = 0;
 
   @override
   void initState() {
     super.initState();
-
+    duration = widget.second;
     _currentTimeSubscription =
         context.read<TimerBloc>().timerDataStream.listen((currentTime) {
       setState(() {
-        _currentTime = currentTime;
+        duration = currentTime;
       });
     });
   }
@@ -54,8 +162,6 @@ class _CircularTimerWidgetState extends State<CircularTimerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var duration = _currentTime;
-
     var hoursStr = (duration ~/ 3600).toString().padLeft(2, '0');
     var minutesStr = ((duration ~/ 60) % 60).toString().padLeft(2, '0');
     var secondsStr = (duration % 60).toString().padLeft(2, '0');
@@ -69,11 +175,11 @@ class _CircularTimerWidgetState extends State<CircularTimerWidget> {
         child: CustomPaint(
           painter: CircularTimerPainter(
             context: context,
-            progress: 89,
+            progress: duration / widget.second,
             gradient: const LinearGradient(
               colors: [
-                Color.fromARGB(255, 120, 212, 255),
-                Color.fromARGB(255, 24, 119, 167),
+                Color.fromARGB(255, 92, 182, 224),
+                Color.fromARGB(255, 0, 69, 104),
               ],
               stops: [0.0, 1.0],
               begin: Alignment.topCenter,
